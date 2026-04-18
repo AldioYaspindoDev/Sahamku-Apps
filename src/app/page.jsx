@@ -3,7 +3,7 @@ import HeroImage from "../components/HeroImage";
 import MarquesLogos from "../components/Marqueslogos";
 import XGBoost from "../components/XGBoost";
 import Cta from "../components/Cta";
-import Demo from "../components/Demo";
+import Demo from "../components/Article";
 import StockMarket from "../components/StockMarket";
 import StockList from "../components/StockList";
 import Footer from "../components/Footer";

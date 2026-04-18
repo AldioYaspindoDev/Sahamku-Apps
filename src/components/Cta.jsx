@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function Cta() {
   return (
     <section className="py-24 bg-rose-50/30">
@@ -21,9 +22,9 @@ export default function Cta() {
               <p className="text-xl text-gray-600 font-light mb-10">
                 Gunakan alat simulasi kami untuk melihat potensi keuntungan dari strategi investasi Anda berdasarkan prediksi AI kami yang akurat.
               </p>
-              <button className="px-10 py-4 bg-rose-800 text-white text-lg font-bold rounded-full hover:bg-rose-900 transition-all shadow-lg hover:shadow-rose-800/20 active:scale-95">
+              <Link href="/PrediksiSaham" className="px-10 py-4 bg-rose-800 text-white text-lg font-bold rounded-full hover:bg-rose-900 transition-all shadow-lg hover:shadow-rose-800/20 active:scale-95">
                 Coba Simulasi Sekarang
-              </button>
+              </Link>
             </div>
           </div>
         </div>

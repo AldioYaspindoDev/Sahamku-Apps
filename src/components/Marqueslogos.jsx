@@ -17,13 +17,13 @@ export default function MarquesLogos() {
       <span className="text-rose-800 ms-2">Saham US</span></h2>
     <div className="relative w-full overflow-hidden bg-white py-12 border-y border-gray-50">
       {/* Gradient Overlays */}
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10"></div>
-      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
+      <div className="absolute inset-y-0 left-0 w-32 bg-linear-to-r from-white to-transparent z-10"></div>
+      <div className="absolute inset-y-0 right-0 w-32 bg-linear-to-l from-white to-transparent z-10"></div>
       
       <div className="flex animate-marquee whitespace-nowrap items-center">
         {/* First set of logos */}
         {logos.map((logo, idx) => (
-          <div key={idx} className="mx-12 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100 flex-shrink-0">
+          <div key={idx} className="mx-12 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100 shrink-0">
             <img
               src={logo.src}
               alt={logo.name}
@@ -33,7 +33,7 @@ export default function MarquesLogos() {
         ))}
         {/* Second set of logos for seamless loop */}
         {logos.map((logo, idx) => (
-          <div key={`dup-${idx}`} className="mx-12 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100 flex-shrink-0">
+          <div key={`dup-${idx}`} className="mx-12 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100 shrink-0">
             <img
               src={logo.src}
               alt={logo.name}

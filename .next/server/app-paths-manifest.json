@@ -1,4 +1,6 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
   "/PrediksiSaham/page": "app/PrediksiSaham/page.js",
-  "/page": "app/page.js"
+  "/PrediksiSaham/[symbol]/page": "app/PrediksiSaham/[symbol]/page.js"
 }
