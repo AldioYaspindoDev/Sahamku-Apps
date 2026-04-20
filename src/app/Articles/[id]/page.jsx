@@ -40,11 +40,15 @@ export default function ArticleDetail() {
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
                         {article.headline}
                     </h2>
-                    <p className="mt-4 text-xl text-gray-500 font-light max-w-2xl mx-auto">
+                    <p className="mt-4 text-xl mb-4 text-gray-500 font-light max-w-2xl mx-auto">
                         {article.summary}
                     </p>
+                    <a href={article.url}
+                className="text-gray-500 hover:text-blue-500 mx-auto"
+                >Read More Here ...</a>
                 </div>
             </div>
+
         </article>
         <Footer/>
         </>

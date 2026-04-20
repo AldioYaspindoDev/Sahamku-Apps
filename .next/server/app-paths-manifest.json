@@ -1,6 +1,5 @@
 {
+  "/Login/page": "app/Login/page.js",
   "/page": "app/page.js",
-  "/Articles/[id]/page": "app/Articles/[id]/page.js",
-  "/PrediksiSaham/page": "app/PrediksiSaham/page.js",
-  "/PrediksiSaham/[symbol]/page": "app/PrediksiSaham/[symbol]/page.js"
+  "/Articles/[id]/page": "app/Articles/[id]/page.js"
 }
