@@ -165,7 +165,7 @@ export default function StockList() {
 
           {/* ── Visual Side: Grafik Pasar ── */}
           <div className="relative group">
-            <div className="absolute -inset-10 bg-gradient-to-tr from-rose-200 via-rose-50 to-rose-100 rounded-[4rem] opacity-20 blur-3xl group-hover:opacity-40 transition-all duration-700" />
+            <div className="absolute -inset-10 bg-linear-to-tr from-rose-200 via-rose-50 to-rose-100 rounded-[4rem] opacity-20 blur-3xl group-hover:opacity-40 transition-all duration-700" />
 
             <div className="relative overflow-hidden rounded-[3rem] shadow-2xl border border-white/50 bg-white group-hover:shadow-rose-200/50 transition-shadow duration-500 p-8 md:p-10">
               {/* Header grafik */}

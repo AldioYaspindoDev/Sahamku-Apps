@@ -11,6 +11,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
+    "/Articles/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/Articles/[id]/page.js"
+    ],
     "/PrediksiSaham/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

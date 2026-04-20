@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useState, useEffect } from "react";
 export default function Articles() {
   const [news, setNews] = useState([]);
@@ -47,12 +47,12 @@ export default function Articles() {
                 <p className="text-gray-600 font-light leading-relaxed">
                   {item.summary}
                 </p>
-                <button className="mt-6 text-rose-800 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                <Link href={`/Articles/${item.id}`} className="mt-6 text-rose-800 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
                   Baca Selengkapnya
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </button>
+                </Link>
               </div>
             </div>
           ))
