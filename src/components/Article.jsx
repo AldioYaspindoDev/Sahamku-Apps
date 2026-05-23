@@ -6,14 +6,15 @@ export default function Articles() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/news/").then((res) => res.json()).then((data) => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+    fetch(`${apiUrl}/news/`).then((res) => res.json()).then((data) => {
       setNews(data);
       setLoading(false);
     }).catch((err) => {
       console.error("Gagal Mengambil berita : ", err);
       setLoading(false);
     })
-  });
+  }, []);
 
   if(loading) return <p className="text-center text-gray-600">Memuat Berita...</p>
 

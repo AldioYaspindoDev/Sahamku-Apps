@@ -17,7 +17,8 @@ export default function Register() {
     setError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/users/login", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+      const response = await fetch(`${apiUrl}/users/login`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

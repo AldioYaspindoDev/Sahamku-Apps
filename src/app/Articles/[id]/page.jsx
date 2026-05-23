@@ -13,14 +13,15 @@ export default function ArticleDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:8000/news/${id}`).then((res) => res.json()).then((data) => {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        fetch(`${apiUrl}/news/${id}`).then((res) => res.json()).then((data) => {
             setArticle(data);
             setLoading(false);
         }).catch((err) => {
             console.error("Gagal Mengambil berita : ", err);
             setLoading(false);
         })
-    });
+    }, [id]);
 
     if(loading) return <p className="text-center text-gray-600">Memuat Berita...</p>
 

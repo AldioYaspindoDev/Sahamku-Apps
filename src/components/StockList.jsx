@@ -142,7 +142,8 @@ export default function StockList() {
   useEffect(() => {
     const fetchMarkets = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/market/overview");
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        const response = await fetch(`${apiUrl}/market/overview`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setMarkets(data.slice(0, 6));
