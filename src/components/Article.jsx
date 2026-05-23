@@ -55,8 +55,7 @@ export default function Articles() {
                 </Link>
               </div>
             </div>
-          ))
-          ) : (
+          ))) : (
             <p className="text-gray-500">Tidak ada berita tersedia saat ini.</p>
           )}
         </div>

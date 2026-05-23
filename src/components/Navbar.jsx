@@ -26,7 +26,7 @@ export default function Navbar() {
             <Link href="/PrediksiSaham" className="text-gray-700 hover:text-rose-800 font-medium transition-colors">
               Daftar Saham
             </Link>
-            <Link href="/daftar-saham" className="text-gray-700 hover:text-rose-800 font-medium transition-colors">
+            <Link href="/AboutUs" className="text-gray-700 hover:text-rose-800 font-medium transition-colors">
               Tentang Kami
             </Link>
             <Link href="/Register" className="px-6 py-2.5 bg-rose-800 text-white rounded-full font-medium hover:bg-rose-900 transition-all shadow-md hover:shadow-lg">
