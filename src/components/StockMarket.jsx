@@ -7,7 +7,7 @@ export default function StockMarket() {
   ];
 
   return (
-    <section className="py-24 bg-gray-900 text-white overflow-hidden relative">
+    <section className="py-25 bg-gray-900 text-white overflow-hidden relative">
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-rose-800 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-rose-800 rounded-full blur-3xl"></div>
