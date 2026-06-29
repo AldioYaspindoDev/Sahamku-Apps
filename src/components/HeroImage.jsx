@@ -42,9 +42,7 @@ export default function HeroImage() {
 
           {/* Right Content - Hero Image */}
           <div className="relative">
-            <div className=
-            "relative z-10 p-4 bg-white/30 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl overflow-hidden"
-            >
+            <div>
               <img
                 className="w-full h-auto rounded-2xl shadow-lg"
                 src="/asset/HeroImage.png"
