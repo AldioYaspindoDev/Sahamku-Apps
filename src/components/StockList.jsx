@@ -13,6 +13,8 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import Image from "next/image";
+import { MarketService } from "../service/marketService";
+import Link from "next/link";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Filler);
 
@@ -142,11 +144,9 @@ export default function StockList() {
   useEffect(() => {
     const fetchMarkets = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-        const response = await fetch(`${apiUrl}/market/overview`);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        setMarkets(data.slice(0, 6));
+
+        const response = await MarketService.getDataMarket();
+        setMarkets(response.slice(0, 5));
       } catch (error) {
         console.error("Error fetching market data:", error);
       } finally {
@@ -237,9 +237,9 @@ export default function StockList() {
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Live Market Data</span>
                 </div>
               </div>
-              <button className="group flex items-center gap-2 text-rose-800 font-bold hover:gap-3 transition-all duration-300 bg-rose-50 px-5 py-2.5 rounded-2xl hover:bg-rose-800 hover:text-white">
+              <Link href="/AllMarkets" className="group flex items-center gap-2 text-rose-800 font-bold hover:gap-3 transition-all duration-300 bg-rose-50 px-5 py-2.5 rounded-2xl hover:bg-rose-800 hover:text-white">
                 Show All <FiArrowRight />
-              </button>
+              </Link>
             </div>
 
             <div className="space-y-1 relative z-10">

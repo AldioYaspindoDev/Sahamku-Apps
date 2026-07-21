@@ -1,19 +1,25 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { ArticleServie } from "../service/articleService";
 export default function Articles() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const HandleGetArticle = async () => {
+    setLoading(true);
+    try {
+      const response = await ArticleServie.getArticle();
+      setNews(response)
+    } catch (error) {
+      console.error("gagal mendapatkan data article",error.message)
+    } finally{
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-    fetch(`${apiUrl}/news/`).then((res) => res.json()).then((data) => {
-      setNews(data);
-      setLoading(false);
-    }).catch((err) => {
-      console.error("Gagal Mengambil berita : ", err);
-      setLoading(false);
-    })
+    HandleGetArticle();
   }, []);
 
   if(loading) return <p className="text-center text-gray-600">Memuat Berita...</p>
@@ -30,34 +36,42 @@ export default function Articles() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-l border-t border-gray-200">
           {news.length > 0 ? (news.map((item, index) => (
-            <div key={index} className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="relative h-64 overflow-hidden">
+            <div key={index} className="p-10 border-r border-b border-gray-200 flex flex-col bg-white hover:bg-gray-50 transition-colors duration-200 group">
+              {/* Cover Image */}
+              <div className="relative h-48 overflow-hidden rounded-xl mb-6 border border-gray-100 shadow-sm">
                 <img
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   src={item.image || "https://via.placeholder.com/400x200?text=No+Image"}
                   alt={item.headline}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://via.placeholder.com/400x200?text=No+Image";
+                  }}
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-rose-800 transition-colors">
+              
+              {/* Content */}
+              <div className="flex flex-col flex-grow">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-rose-800 transition-colors leading-snug">
                   {item.headline}
                 </h3>
-                <p className="text-gray-600 font-light leading-relaxed">
+                <p className="text-gray-500 text-sm leading-relaxed mb-6">
                   {item.summary}
                 </p>
-                <Link href={`/Articles/${item.id}`} className="mt-6 text-rose-800 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                <Link href={`/Articles/${item.id}`} className="mt-auto text-rose-800 font-bold flex items-center gap-2 hover:gap-3 transition-all text-sm">
                   Baca Selengkapnya
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
               </div>
             </div>
           ))) : (
-            <p className="text-gray-500">Tidak ada berita tersedia saat ini.</p>
+            <div className="p-10 border-r border-b border-gray-200 text-center col-span-3">
+              <p className="text-gray-500">Tidak ada berita tersedia saat ini.</p>
+            </div>
           )}
         </div>
       </div>

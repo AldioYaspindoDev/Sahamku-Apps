@@ -1,55 +1,68 @@
-"use client";
+# Spesifikasi Desain Halaman Login
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { AuthService } from "../../service/authService";
-import Header from "../../components/header";
+Dokumen ini berisi rincian desain antarmuka (UI) terbaru untuk halaman login bergaya *desktop browser window* yang terbenam di bagian bawah layar.
+
+## 1. Konsep Utama
+*   **Tampilan Dasar:** Meniru jendela *browser desktop* klasik (memiliki bar atas dengan tombol kontrol *close, minimize, maximize*).
+*   **Skema Warna & Tata Letak:**
+    *   **Latar Belakang (Background):** Biru tua gelap (`#0f172a` atau `slate-900` pada Tailwind) dengan properti `overflow-hidden` dan `items-end` untuk memotong bagian bawah jendela.
+    *   **Container Window:** Putih bersih, diperlebar hingga `max-w-4xl` (896px), menggunakan sudut melengkung hanya di atas (`rounded-t-2xl`), dan digeser ke bawah menggunakan efek `translate-y-12`.
+    *   **Batas Lebar Form:** Menggunakan pembatas tambahan (`max-w-md` atau 448px) yang diposisikan di tengah (`mx-auto`) agar form input tetap rapi dan tidak terlalu melebar mengikuti container induk.
+    *   **Jarak Bawah (Spacing):** Diberikan padding bawah ekstra `pb-20` agar elemen OAuth Google tidak terpotong oleh efek translasi.
+*   **Metode Autentikasi:** 
+    *   Login Kredensial: Input Email & Password.
+    *   Single Sign-On (SSO): Tombol "Lanjutkan dengan Google".
+
+## 2. Struktur Visual (Wireframe Mockup)
+
+```text
+=============================================================================
+| [x] [-] [+]                 https://sahamku.id/login                      |
+=============================================================================
+|                                                                           |
+|                               Masuk ke Akun                               |
+|                  Silakan masukkan email dan password Anda                 |
+|                                                                           |
+|                              Email                                        |
+|                              [ nama@email.com                         ]   |
+|                                                                           |
+|                              Password                                     |
+|                              [ ••••••••                               ]   |
+|                                                                           |
+|                              [                 LOGIN                  ]   |
+|                                                                           |
+|                            ----------------- ATAU -----------------       |
+|                                                                           |
+|                              [ [G] Lanjutkan dengan Google            ]   |
+|                                                                           |
+|  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   | <-- Tepi Bawah Layar Monitor (Viewport Edge)
+|  (Bagian bawah container kosong/terpotong karena efek translate-y-12)      |
+=============================================================================
+```
+*(Tampilan berada di posisi bawah-tengah layar dengan latar belakang gelap)*
+
+## 3. Source Code (React.js + Tailwind CSS)
+
+Berikut adalah komponen React untuk halaman login yang diimplementasikan:
+
+```jsx
+import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [hashed_password, setHashedPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    if (!email || !hashed_password) {
-      setError("semua field harus diisi");
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await AuthService.login({
-        email,
-        hashed_password,
-      });
-
-      localStorage.setItem("token", response.access_token);
-
-      const payload = response.access_token.split(".")[1];
-      if(!payload){
-        throw new Error("token tidak ditemukan")
-      }
-
-      router.push("/");
-    } catch (error) {
-      const errorMsg = error.response?.data?.detail || error.message || "gagal login";
-      setError(errorMsg);
-    } finally {
-      setLoading(false);
-    }
+    // Logic login...
   };
 
   return (
-    <section>
-      <Header/>
-    {/* // Background utama: Biru tua gelap dengan overflow-hidden agar terpotong di bawah */}
-    <div className="min-h-screen bg-slate-900 flex items-end justify-center px-4 pb-0 font-sans overflow-hidden">
+    // Background utama: Biru tua gelap dengan overflow-hidden agar terpotong di bawah
+    <div className="min-h-screen bg-slate-900 flex items-end justify-center px-4 pt-10 pb-0 font-sans overflow-hidden">
       
       {/* Container bergaya Window Browser Desktop (Lebih lebar, rounded atas, digeser sedikit ke bawah) */}
       <div className="w-full max-w-4xl bg-white rounded-t-2xl shadow-2xl overflow-hidden flex flex-col translate-y-12 transition-all duration-300">
@@ -98,8 +111,8 @@ export default function Login() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <input
                   type="password"
-                  value={hashed_password}
-                  onChange={(e) => setHashedPassword(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900"
                   placeholder="••••••••"
                   required
@@ -110,7 +123,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-red-700 hover:bg-red-900 disabled:bg-red-400 text-white font-semibold py-2.5 rounded-lg transition duration-200 shadow-md hover:shadow-lg active:transform active:scale-95 flex items-center justify-center"
+                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-semibold py-2.5 rounded-lg transition duration-200 shadow-md hover:shadow-lg active:transform active:scale-95 flex items-center justify-center"
               >
                 {loading ? "Mohon Tunggu..." : "Login"}
               </button>
@@ -137,17 +150,17 @@ export default function Login() {
             <button
               type="button"
               className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-2.5 rounded-lg transition duration-200 shadow-sm active:bg-gray-100"
-              >
+            >
               {/* SVG Logo Google */}
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  />
+                />
                 <path
                   fill="#34A853"
                   d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
+                />
                 <path
                   fill="#FBBC05"
                   d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
@@ -155,7 +168,7 @@ export default function Login() {
                 <path
                   fill="#EA4335"
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  />
+                />
               </svg>
               Lanjutkan dengan Google
             </button>
@@ -163,6 +176,6 @@ export default function Login() {
         </div>
       </div>
     </div>
-                  </section>
   );
 }
+```

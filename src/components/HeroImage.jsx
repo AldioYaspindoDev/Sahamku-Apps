@@ -1,57 +1,71 @@
+"use client";
+import React from 'react';
+
 export default function HeroImage() {
   return (
-    <section className="relative overflow-hidden bg-white py-20">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-150 h-150 bg-rose-50 rounded-full blur-3xl opacity-50 z-0"></div>
+    // Outer container dengan padding untuk memberikan efek "card melayang"
+    <section className="bg-gray-50 p-4 sm:p-6 lg:p-8 flex flex-col font-monofonto">
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="text-center lg:text-left">
-            <h2 className="text-black font-bold tracking-wide uppercase text-xl mb-4">
-              AI-Driven US Stock Price Predictor
-            </h2>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-              Buat <span className="text-rose-800">Prediksi</span> Harga Saham Yang Kamu Mau
-            </h1>
-            <p className="text-xl text-gray-600 font-light leading-relaxed mb-10 max-w-2xl mx-auto lg:mx-0">
-              Kami memprediksi harga saham-saham besar US sebagai landasan kamu dalam mengambil keputusan investasi yang lebih cerdas.
-            </p>
+      {/* Main Card Pembungkus Hero Section */}
+      <div className="relative w-full max-w-7xl mx-auto flex-1 flex flex-col rounded-[2.5rem] overflow-hidden shadow-xl ring-1 ring-gray-900/5 min-h-[600px] justify-center">
+        
+        {/* Background Gradients (Efek Mesh/Blur Bertema Rose Sahamku) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-rose-100 to-rose-800 z-0"></div>
+        {/* Overlay cahaya di bagian atas */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/80 via-transparent to-transparent z-0"></div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button className="px-10 py-4 bg-rose-800 text-white text-lg font-bold rounded-full hover:bg-rose-900 transition-all shadow-xl hover:shadow-rose-200/50 hover:-translate-y-1">
-                Start Predict
-              </button>
-              <button className="px-10 py-4 bg-white border-2 border-rose-800 text-rose-800 text-lg font-bold rounded-full hover:bg-rose-50 transition-all">
-                Learn More
-              </button>
-            </div>
+        {/* Content Layer */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-20 lg:py-28">
+          
+          {/* Subheading Badge */}
+          <h2 className="text-rose-900 font-extrabold tracking-widest uppercase text-sm mb-6 bg-rose-200/50 px-4 py-1.5 rounded-full backdrop-blur-xs">
+            AI-Driven US Stock Price Predictor
+          </h2>
+          
+          {/* Heading */}
+          <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight text-gray-900 max-w-4xl mb-6 leading-tight">
+            Buat <span className="text-rose-800">Prediksi</span> Harga <br className="hidden sm:block" /> Saham Yang Kamu Mau
+          </h1>
+          
+          {/* Description */}
+          <p className="text-lg lg:text-xl text-gray-700/90 max-w-2xl mb-10 leading-relaxed font-medium">
+            Kami memprediksi harga saham-saham besar US sebagai landasan kamu dalam mengambil keputusan investasi yang lebih cerdas.
+          </p>
 
-            {/* Popular Stocks Chips */}
-            <div className="mt-16">
-              {/* <p className="text-gray-500 text-sm font-medium mb-4">Prediksi Lebih dari 100 Saham US:</p> */}
-              <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                {['NVDA', 'AAPL', 'GOOGL', 'AMZN', 'TSLA'].map((stock) => (
-                  <span key={stock} className="px-6 py-2 bg-gray-50 border border-gray-200 rounded-full text-gray-700 text-sm font-semibold hover:border-rose-800 hover:text-rose-800 transition-colors cursor-default">
-                    {stock}
-                  </span>
-                ))}
-              </div>
-            </div>
+          {/* Form Input Pencarian Saham */}
+          <form 
+            onSubmit={(e) => e.preventDefault()} 
+            className="w-full max-w-xl flex items-center bg-white p-2 rounded-full shadow-2xl hover:shadow-xl transition-shadow border border-white/50 mb-8"
+          >
+            <input 
+              type="text" 
+              placeholder="Cari Kode Saham (misal: NVDA, AAPL, TSLA)..." 
+              className="flex-1 bg-transparent border-none outline-none px-6 text-gray-800 placeholder-gray-400 font-medium"
+              required
+            />
+            <button 
+              type="submit" 
+              className="w-12 h-12 flex items-center justify-center bg-rose-800 hover:bg-rose-900 text-white rounded-full transition-colors shrink-0 shadow-md"
+            >
+              {/* Arrow Up-Right Icon */}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </button>
+          </form>
+
+          {/* Chips Saham Populer */}
+          <div className="flex flex-wrap gap-3 justify-center">
+            {['NVDA', 'AAPL', 'GOOGL', 'AMZN', 'TSLA'].map((stock) => (
+              <span 
+                key={stock} 
+                className="px-6 py-2 bg-white/70 hover:bg-white border border-rose-200/50 rounded-full text-gray-800 text-sm font-semibold hover:border-rose-800 hover:text-rose-800 transition-all cursor-pointer shadow-xs"
+              >
+                {stock}
+              </span>
+            ))}
           </div>
 
-          {/* Right Content - Hero Image */}
-          <div className="relative">
-            <div>
-              <img
-                className="w-full h-auto rounded-2xl shadow-lg"
-                src="/asset/HeroImage.png"
-                alt="Stock Analysis Hero"
-              />
-            </div>
-            {/* Decorative element behind image */}
-            <div className="absolute -bottom-6 -left-6 w-full h-full rounded-3xl -z-10 rotate-3"></div>
-          </div>
         </div>
       </div>
     </section>

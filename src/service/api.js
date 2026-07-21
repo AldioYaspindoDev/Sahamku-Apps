@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_BASE_URL } from '../app/utils/constant'
+import { API_BASE_URL } from '../utils/constant'
 
 
 // =============================
@@ -30,8 +30,15 @@ api.interceptors.response.use(
     (error) => {
         if(error.response && error.response.status === 401){
             localStorage.removeItem("token");
-            if(window.location.pathname !== '/login'){
-                window.location.href = '/login'
+            localStorage.removeItem("role");
+            if(window.location.pathname.startsWith('/Admins')){
+                if (window.location.pathname !== '/Admins/AuthAdmin/LoginAdmin') {
+                    window.location.href = '/Admins/AuthAdmin/LoginAdmin';
+                }
+            } else {
+                if (window.location.pathname !== '/Login' && window.location.pathname !== '/login') {
+                    window.location.href = '/Login';
+                }
             }
         }
         return Promise.reject(error);
