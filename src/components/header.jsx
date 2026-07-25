@@ -5,7 +5,7 @@ export default function Header(){
             <Link href="/">
             <div className="w-15 flex items-center">
                 <img src="/asset/SahamkuLogo.png" alt="Logo" />
-                <h1 className="font-bold text-xl text-red-600">Sahamku</h1>
+                <h1 className="font-bold text-xl text-rose-800">SAHAMKU</h1>
             </div>
             </Link>
         </section>

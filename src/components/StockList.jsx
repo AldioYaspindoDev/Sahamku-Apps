@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { FiTrendingUp, FiTrendingDown, FiActivity, FiArrowRight } from "react-icons/fi";
 import {
   Chart as ChartJS,
@@ -18,11 +18,10 @@ import Link from "next/link";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Filler);
 
-// ─── StockRow (tidak diubah) ───────────────────────────────────────────────
-function StockRow({ name, price, change, percentageChange }) {
+// ─── StockRow ──────────────────────────────────────────────────────────────
+function StockRow({ name, price, change, percentageChange, rank }) {
   const isPositive = percentageChange >= 0;
-  
-  // Mapping logo berdasarkan nama saham
+
   const getLogo = (stockName) => {
     const logos = {
       "NVDA": "/asset/Nvidia.jpeg",
@@ -41,32 +40,40 @@ function StockRow({ name, price, change, percentageChange }) {
   };
 
   return (
-    <div className="flex items-center justify-between p-5 hover:bg-gray-50/80 rounded-2xl transition-all duration-300 border-b border-gray-100 last:border-0 group cursor-default">
-      <div className="flex items-center gap-4">
-        <div className={`w-12 h-12 rounded-2xl flex items-center overflow-hidden justify-center font-bold text-lg shadow-sm transition-transform group-hover:scale-110 duration-500 ${
-          isPositive ? "bg-emerald-50" : "bg-rose-50"
-        }`}>
-          <Image 
-            src={getLogo(name)}
-            alt={name} 
-            width={48}
-            height={48}
-            className="w-full h-full object-cover" 
-          />
-        </div>
-        <div>
-          <h4 className="font-bold text-gray-900 group-hover:text-rose-800 transition-colors uppercase tracking-tight">{name}</h4>
-          <p className="text-xs text-gray-500 font-medium whitespace-nowrap">Global Market</p>
-        </div>
+    <div className="group flex items-center gap-4 p-4 rounded-xl hover:bg-rose-50/50 transition-all duration-300 border border-transparent hover:border-rose-100">
+      {/* Rank */}
+      <div className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500 shrink-0 group-hover:bg-rose-100 group-hover:text-rose-700 transition-colors">
+        {rank}
       </div>
-      <div className="text-right">
-        <div className="font-bold text-gray-900 text-lg group-hover:scale-105 transition-transform origin-right duration-300">
+
+      {/* Logo */}
+      <div className={`w-11 h-11 rounded-xl overflow-hidden border-2 transition-colors shadow-sm shrink-0 ${
+        isPositive ? "border-emerald-100 group-hover:border-emerald-200" : "border-rose-100 group-hover:border-rose-200"
+      }`}>
+        <Image
+          src={getLogo(name)}
+          alt={name}
+          width={44}
+          height={44}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <h4 className="font-bold text-gray-900 text-sm group-hover:text-rose-800 transition-colors uppercase tracking-tight truncate">{name}</h4>
+        <p className="text-[11px] text-gray-400 font-medium">Global Market</p>
+      </div>
+
+      {/* Price & Change */}
+      <div className="text-right shrink-0">
+        <div className="font-bold text-gray-900 text-sm tabular-nums">
           ${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </div>
-        <div className={`text-sm font-semibold flex items-center justify-end gap-1 ${
-          isPositive ? "text-emerald-500" : "text-rose-500"
+        <div className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md mt-0.5 ${
+          isPositive ? "text-emerald-700 bg-emerald-50" : "text-rose-700 bg-rose-50"
         }`}>
-          {isPositive ? <FiTrendingUp size={14} className="animate-bounce" /> : <FiTrendingDown size={14} className="animate-bounce" />}
+          {isPositive ? <FiTrendingUp size={11} /> : <FiTrendingDown size={11} />}
           {isPositive ? "+" : ""}{percentageChange.toFixed(2)}%
         </div>
       </div>
@@ -74,7 +81,7 @@ function StockRow({ name, price, change, percentageChange }) {
   );
 }
 
-// ─── MarketChart (komponen baru) ───────────────────────────────────────────
+// ─── MarketChart ───────────────────────────────────────────────────────────
 function MarketChart({ markets }) {
   const labels = markets.map((m) => m.name);
   const prices = markets.map((m) => m.price);
@@ -88,11 +95,14 @@ function MarketChart({ markets }) {
         data: prices,
         borderColor: allPositive ? "#10b981" : "#f43f5e",
         backgroundColor: allPositive
-          ? "rgba(16,185,129,0.08)"
-          : "rgba(244,63,94,0.08)",
+          ? "rgba(16,185,129,0.06)"
+          : "rgba(244,63,94,0.06)",
         borderWidth: 2.5,
-        pointRadius: 4,
-        pointBackgroundColor: allPositive ? "#10b981" : "#f43f5e",
+        pointRadius: 5,
+        pointBackgroundColor: "#fff",
+        pointBorderColor: allPositive ? "#10b981" : "#f43f5e",
+        pointBorderWidth: 2.5,
+        pointHoverRadius: 7,
         tension: 0.4,
         fill: true,
       },
@@ -106,6 +116,12 @@ function MarketChart({ markets }) {
     plugins: {
       legend: { display: false },
       tooltip: {
+        backgroundColor: "#1e293b",
+        titleFont: { size: 12, weight: "600" },
+        bodyFont: { size: 13 },
+        padding: 12,
+        cornerRadius: 10,
+        displayColors: false,
         callbacks: {
           label: (ctx) =>
             ` $${ctx.parsed.y.toLocaleString(undefined, {
@@ -117,17 +133,17 @@ function MarketChart({ markets }) {
     },
     scales: {
       x: {
-        ticks: { font: { size: 11 }, color: "#9ca3af" },
+        ticks: { font: { size: 11, weight: "500" }, color: "#94a3b8" },
         grid: { display: false },
         border: { display: false },
       },
       y: {
         ticks: {
           font: { size: 11 },
-          color: "#9ca3af",
+          color: "#94a3b8",
           callback: (v) => `$${Number(v).toLocaleString()}`,
         },
-        grid: { color: "rgba(0,0,0,0.04)" },
+        grid: { color: "rgba(0,0,0,0.03)", drawBorder: false },
         border: { display: false },
       },
     },
@@ -136,7 +152,7 @@ function MarketChart({ markets }) {
   return <Line data={data} options={options} />;
 }
 
-// ─── StockList (struktur utama tidak diubah) ──────────────────────────────
+// ─── StockList (Main Export) ───────────────────────────────────────────────
 export default function StockList() {
   const [markets, setMarkets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -144,7 +160,6 @@ export default function StockList() {
   useEffect(() => {
     const fetchMarkets = async () => {
       try {
-
         const response = await MarketService.getDataMarket();
         setMarkets(response.slice(0, 5));
       } catch (error) {
@@ -159,138 +174,159 @@ export default function StockList() {
     return () => clearInterval(interval);
   }, []);
 
+  // Summary stats from live data
+  const totalChange = markets.reduce((sum, m) => sum + (m.change || 0), 0);
+  const avgChange = markets.length > 0 ? totalChange / markets.length : 0;
+  const positiveCount = markets.filter((m) => m.percentage_change >= 0).length;
+
   return (
     <main id="stock-list" className="bg-white overflow-hidden scroll-mt-20">
       <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+            Pergerakan <span className="text-rose-800">Pasar</span> Hari Ini
+          </h2>
+          <p className="text-gray-500 max-w-xl mx-auto">
+            Pantau harga saham dan indeks utama secara real-time dengan update otomatis setiap 30 detik.
+          </p>
+        </div>
 
-          {/* ── Visual Side: Grafik Pasar ── */}
-          <div className="relative group">
-            <div className="absolute -inset-10 bg-linear-to-tr from-rose-200 via-rose-50 to-rose-100 rounded-[4rem] opacity-20 blur-3xl group-hover:opacity-40 transition-all duration-700" />
-
-            <div className="relative overflow-hidden rounded-[3rem] shadow-2xl border border-white/50 bg-white group-hover:shadow-rose-200/50 transition-shadow duration-500 p-8 md:p-10">
-              {/* Header grafik */}
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <span className="inline-block px-3 py-1 bg-rose-600 text-white text-[10px] font-bold rounded-full mb-3 tracking-wider uppercase">
-                    Analisis AI
-                  </span>
-                  <p className="text-gray-900 font-black text-2xl tracking-tight">Market Terpantau 24/7</p>
-                  <p className="text-gray-400 text-sm mt-1">Performa harga saham saat ini</p>
-                </div>
-                {/* Floating profit card */}
-                <div className="bg-white border border-gray-100 rounded-2xl shadow-lg p-3 flex items-center gap-3 animate-float">
-                  <div className="w-9 h-9 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
-                    <FiTrendingUp size={18} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest leading-none mb-1">Live Profit</p>
-                    <p className="text-base font-bold text-gray-900 leading-none">+$2,480.00</p>
-                  </div>
-                </div>
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+          {/* ── Left: Chart ── */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8 hover:shadow-lg transition-shadow duration-500">
+            {/* Chart Header */}
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Grafik Harga Pasar</h3>
+                <p className="text-xs text-gray-400">Perbandingan harga saham & indeks terpantau</p>
               </div>
-
-              {/* Area grafik */}
-              <div className="relative w-full h-64">
-                {loading ? (
-                  <div className="w-full h-full bg-gray-50 rounded-2xl animate-pulse flex items-center justify-center">
-                    <FiActivity className="text-gray-200 text-3xl" />
-                  </div>
-                ) : markets.length > 0 ? (
-                  <MarketChart markets={markets} />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <p className="text-gray-400 text-sm">Data grafik tidak tersedia.</p>
-                  </div>
-                )}
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-lg border border-emerald-100">
+                <FiTrendingUp className="text-emerald-600" size={14} />
+                <span className="text-xs font-bold text-emerald-700">Live</span>
               </div>
+            </div>
 
-              {/* Mini legend */}
-              {!loading && markets.length > 0 && (
-                <div className="flex flex-wrap gap-3 mt-5">
-                  {markets.map((m, i) => (
-                    <span key={i} className="text-xs font-semibold text-gray-500 bg-gray-50 px-3 py-1 rounded-full">
-                      {m.name}
-                    </span>
-                  ))}
+            {/* Chart Area */}
+            <div className="relative w-full h-64 mb-6">
+              {loading ? (
+                <div className="w-full h-full bg-slate-50 rounded-xl animate-pulse flex items-center justify-center">
+                  <FiActivity className="text-gray-300 text-3xl" />
+                </div>
+              ) : markets.length > 0 ? (
+                <MarketChart markets={markets} />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                  Data grafik tidak tersedia.
                 </div>
               )}
             </div>
 
-            <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-rose-500/10 rounded-full blur-3xl group-hover:bg-rose-500/20 transition-colors duration-500" />
-          </div>
-
-          {/* ── List Side (tidak diubah) ── */}
-          <div className="bg-white rounded-[3rem] shadow-[0_32px_64px_rgba(0,0,0,0.06)] border border-gray-50 p-8 md:p-12 relative overflow-hidden backdrop-blur-xl">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/5 rounded-full -mr-32 -mt-32 blur-3xl opacity-50" />
-
-            <div className="flex justify-between items-end mb-10 relative z-10">
-              <div>
-                <h3 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter">
-                  Pasar <span className="text-rose-800">Hari Ini</span>
-                </h3>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            {/* Chart Legend */}
+            {!loading && markets.length > 0 && (
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100">
+                {markets.map((m, i) => (
+                  <span key={i} className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 bg-slate-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                    <span className={`w-2 h-2 rounded-full ${m.percentage_change >= 0 ? "bg-emerald-500" : "bg-rose-500"}`} />
+                    {m.name}
                   </span>
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Live Market Data</span>
+                ))}
+              </div>
+            )}
+
+            {/* Mini Stats */}
+            {!loading && markets.length > 0 && (
+              <div className="grid grid-cols-3 gap-3 mt-5">
+                <div className="bg-slate-50 rounded-xl p-3 text-center border border-gray-100">
+                  <div className="text-xs text-gray-400 font-medium mb-1">Terpantau</div>
+                  <div className="text-lg font-bold text-gray-900">{markets.length}</div>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3 text-center border border-gray-100">
+                  <div className="text-xs text-gray-400 font-medium mb-1">Naik</div>
+                  <div className="text-lg font-bold text-emerald-600">{positiveCount}</div>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3 text-center border border-gray-100">
+                  <div className="text-xs text-gray-400 font-medium mb-1">Avg Δ</div>
+                  <div className={`text-lg font-bold ${avgChange >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                    {avgChange >= 0 ? "+" : ""}{avgChange.toFixed(2)}
+                  </div>
                 </div>
               </div>
-              <Link href="/AllMarkets" className="group flex items-center gap-2 text-rose-800 font-bold hover:gap-3 transition-all duration-300 bg-rose-50 px-5 py-2.5 rounded-2xl hover:bg-rose-800 hover:text-white">
-                Show All <FiArrowRight />
-              </Link>
+            )}
+          </div>
+
+          {/* ── Right: Stock List ── */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-500">
+            {/* List Header */}
+            <div className="p-6 md:p-8 pb-4">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-lg font-bold text-gray-900">Daftar Harga Pasar</h3>
+                <Link
+                  href="/AllMarkets"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-100 px-4 py-2 rounded-lg hover:bg-rose-100 transition-colors"
+                >
+                  Lihat Semua <FiArrowRight size={12} />
+                </Link>
+              </div>
+              <p className="text-xs text-gray-400">Update otomatis setiap 30 detik</p>
             </div>
 
-            <div className="space-y-1 relative z-10">
+            {/* Stock Rows */}
+            <div className="px-4 md:px-6 pb-6">
               {loading ? (
-                Array(5).fill(0).map((_, i) => (
-                  <div key={i} className="flex items-center justify-between p-5 border-b border-gray-50 last:border-0 animate-pulse">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-gray-100 rounded-2xl" />
-                      <div className="space-y-2">
-                        <div className="h-4 w-20 bg-gray-100 rounded" />
-                        <div className="h-3 w-32 bg-gray-50 rounded" />
+                <div className="space-y-2">
+                  {Array(5).fill(0).map((_, i) => (
+                    <div key={i} className="flex items-center gap-4 p-4 animate-pulse">
+                      <div className="w-7 h-7 bg-gray-100 rounded-lg" />
+                      <div className="w-11 h-11 bg-gray-100 rounded-xl" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-3.5 w-20 bg-gray-100 rounded" />
+                        <div className="h-2.5 w-28 bg-gray-50 rounded" />
+                      </div>
+                      <div className="text-right space-y-2">
+                        <div className="h-3.5 w-20 bg-gray-100 rounded" />
+                        <div className="h-5 w-16 bg-gray-50 rounded-md" />
                       </div>
                     </div>
-                    <div className="text-right space-y-2">
-                      <div className="h-4 w-20 bg-gray-100 rounded" />
-                      <div className="h-3 w-12 bg-gray-50 rounded" />
-                    </div>
-                  </div>
-                ))
+                  ))}
+                </div>
+              ) : markets.length > 0 ? (
+                <div className="space-y-1">
+                  {markets.map((market, index) => (
+                    <StockRow
+                      key={index}
+                      rank={index + 1}
+                      name={market.name}
+                      price={market.price}
+                      change={market.change}
+                      percentageChange={market.percentage_change}
+                    />
+                  ))}
+                </div>
               ) : (
-                markets.map((market, index) => (
-                  <StockRow
-                    key={index}
-                    name={market.name}
-                    price={market.price}
-                    change={market.change}
-                    percentageChange={market.percentage_change}
-                  />
-                ))
-              )}
-
-              {!loading && markets.length === 0 && (
                 <div className="text-center py-16">
-                  <FiActivity className="mx-auto text-gray-200 text-5xl mb-4" />
-                  <p className="text-gray-400 font-medium">Data pasar tidak tersedia saat ini.</p>
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-full mb-4">
+                    <FiActivity className="text-gray-300 text-2xl" />
+                  </div>
+                  <p className="text-gray-400 font-medium text-sm">Data pasar tidak tersedia saat ini.</p>
                 </div>
               )}
             </div>
-          </div>
 
+            {/* Footer */}
+            <div className="px-6 md:px-8 py-3 bg-slate-50 border-t border-gray-100 flex items-center justify-between">
+              <span className="text-xs text-gray-400">Data dari Yahoo Finance API</span>
+              <span className="flex items-center gap-1.5 text-xs text-gray-400">
+                <span className="flex h-1.5 w-1.5 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                </span>
+                Real-time
+              </span>
+            </div>
+          </div>
         </div>
       </section>
-
-      <style jsx global>{`
-        @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-          100% { transform: translateY(0px); }
-        }
-        .animate-float { animation: float 4s ease-in-out infinite; }
-      `}</style>
     </main>
   );
 }

@@ -16,7 +16,7 @@ export default function Navbar() {
                 height={50}
                 className="object-contain"
               />
-              <span className="text-2xl font-bold text-rose-800 tracking-tight">Sahamku</span>
+              <span className="text-2xl font-bold text-rose-800 tracking-tight">SAHAMKU</span>
             </div>
           </Link>
 

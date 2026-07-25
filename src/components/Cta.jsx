@@ -9,7 +9,7 @@ export default function Cta() {
             <div className="order-2 lg:order-1 h-64 lg:h-full min-h-100">
               <img
                 className="w-full h-full object-cover"
-                src="/asset/Grafik.jpeg"
+                src="/asset/Grafik.webp"
                 alt="Investment Simulation"
               />
             </div>

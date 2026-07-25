@@ -13,7 +13,7 @@ const logos = [
 export default function MarquesLogos() {
   return (
     <div>
-    <h2 className="text-black text-center font-bold tracking-wide uppercase text-xl mb-4">Temukan Lebih dari 100 
+    <h2 className="text-black text-center mt-12 font-bold tracking-wide uppercase text-xl mb-4">Temukan Lebih dari 100 
       <span className="text-rose-800 ms-2">Saham US</span></h2>
     <div className="relative w-full overflow-hidden bg-white py-12 border-y border-gray-50">
       {/* Gradient Overlays */}

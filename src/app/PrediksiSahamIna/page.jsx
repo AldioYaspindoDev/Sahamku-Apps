@@ -195,12 +195,8 @@ export default function PrediksiSahamIna() {
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-rose-900/30 border border-rose-700/40 rounded-full text-rose-300 text-xs font-semibold tracking-wider uppercase mb-6">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-            Indeks Saham Indonesia
-          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-5">
-            Insight <span className="bg-gradient-to-r from-rose-400 to-amber-400 bg-clip-text text-transparent">Indeks Saham</span> Indonesia
+            Insight <span className="text-rose-800">Indeks Saham</span> Indonesia
           </h1>
           <p className="max-w-2xl mx-auto text-lg text-slate-300 leading-relaxed">
             Jelajahi data indeks saham utama di Bursa Efek Indonesia. Temukan emiten yang <strong className="text-white">paling konsisten bertahan</strong> di setiap indeks untuk membantu keputusan investasi Anda.
